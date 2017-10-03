@@ -1,4 +1,4 @@
-# Binary Tree Playgrounds
+# Binary Tree Playground
 
 A simple repository of my binary tree version.
 
@@ -9,4 +9,4 @@ For build:
      
 And execute with:
 
-     ./tree
+     ./trees
