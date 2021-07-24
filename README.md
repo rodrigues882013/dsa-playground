@@ -1,12 +1,13 @@
-# Binary Tree Playground
+# DSA general Playground
 
 A simple repository of my binary tree version.
 
 For build:
-
-     cmake .
+     mkdir build
+     cd build
+     cmake ..
      make
      
 And execute with:
 
-     ./trees
+     ./main
