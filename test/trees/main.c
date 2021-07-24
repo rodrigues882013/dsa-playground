@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/trees/tree.c"
+#include "../../src/trees/tree.c"
 
 
 int main(int argc, char** args)

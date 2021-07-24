@@ -3,4 +3,4 @@ project (dsa-playground)
 
 include_directories(./include ./src)
 
-add_executable(main test/main.c)
+add_executable(main test/trees/main.c)

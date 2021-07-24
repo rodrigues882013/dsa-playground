@@ -1,8 +1,9 @@
 # DSA general Playground
 
-A simple repository of my binary tree version.
+A simple repository of my personal dsa versions.
 
 For build:
+
      mkdir build
      cd build
      cmake ..
