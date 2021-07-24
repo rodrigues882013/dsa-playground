@@ -1,6 +1,6 @@
 # DSA general Playground
 
-A simple repository of my personal dsa versions.
+A simple repository for my personal dsa versions.
 
 For build:
 
