@@ -18,9 +18,9 @@ typedef struct Node *type_pt_node;
 
 // Prototypes
 type_pt_node allocate(int);
-void insert(int, type_pt_node*);
-void delete(int, type_pt_node*);
 int find(int, type_pt_node);
+void add(type_pt_node*, int);
+void delete(int, type_pt_node*);
 void show_in_order(type_pt_node);
 void show_in_preorder(type_pt_node);
 void show_in_postorder(type_pt_node);

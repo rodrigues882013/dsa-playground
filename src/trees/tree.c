@@ -2,19 +2,19 @@
 #include <stdlib.h>
 #include "tree.h"
 
+#define MAX(a, b) ((a) > (b) ? a : b)
+#define MIN(a, b) ((a) < (b) ? a : b)
+
+
 type_pt_node allocate(int data)
 {
-    type_pt_node new_node = (type_pt_node) malloc(sizeof(struct Node));
+    type_pt_node new_node = (type_pt_node) malloc (sizeof(struct Node));
     new_node->data = data;
     new_node->left = NULL;
     new_node->right = NULL;
     new_node->color = 0;
 
     return new_node;
-}
-
-int max(int a, int b) {
-    return a<b ? a : b;
 }
 
 int get_height(type_pt_node head)
@@ -37,101 +37,95 @@ int get_height(type_pt_node head)
     }
     else
     {
-        return 1 + max(get_height(head->left), get_height(head->right));
+        return 1 + MAX(get_height(head->left), get_height(head->right));
     }
 }
 
-type_pt_node rotate_to_right(type_pt_node* head)
+type_pt_node* right_rotate(type_pt_node* node)
 {
-    type_pt_node subtree = (*head)->left;
-    type_pt_node temp = subtree->right;
+    type_pt_node* subtree = &(*node)->left;
+    type_pt_node* temp = &(*subtree)->right;
  
     // Perform rotation
-    subtree->right = *head;
-    (*head)->left = temp;
+    (*subtree)->right = *node;
+    (*node)->left = temp;
 
-    return subtree;
+    return &(*subtree);
 }
 
-type_pt_node rotate_to_left(type_pt_node* head)
+type_pt_node* left_rotate(type_pt_node* node)
 {
-    type_pt_node subtree = (*head)->right;
-    type_pt_node temp = subtree->left;
+    type_pt_node* subtree = &(*node)->right;
+    type_pt_node* temp = &(*subtree)->left;
  
     // Perform rotation
-    subtree->left = *head;
-    (*head)->right = temp;
+    (*subtree)->left = *node;
+    (*node)->right = temp;
 
-    return subtree;
+    return &(*subtree);
 }
 
-void avl_balance(type_pt_node* head, int data)
+void rebalance(type_pt_node* node, int data)
 {
     // Get height for right subtree
-    int height_right = get_height((*head)->right);
+    int height_right = get_height((*node)->right);
 
     // Get height for left subtree
-    int height_left = get_height((*head)->left);
+    int height_left = get_height((*node)->left);
 
     // Calculate balance factor
     int balance = height_left - height_right;
 
     if (balance < -1)
     {
-        if (data < (*head)->right->data )
+        if (data < (*node)->right->data)
         {
             //Right-Left
-            (*head)->right = rotate_to_right(&(*head)->right);
-            (*head) = rotate_to_left(&(*head));
+            (*node)->right = right_rotate(&(*node)->right);
+            *node = right_rotate(&(*node));
         }
         else
         {
             //Left
-            (*head) = rotate_to_left(&(*head));
+            *node = left_rotate(&(*node));
         }
     }
     else if (balance > 1)
     {
-        if (data > (*head)->left->data )
+        if (data > (*node)->left->data)
         {
             //Left-Right
-            (*head)->left = rotate_to_left(&(*head));
-            (*head) = rotate_to_right(&(*head));
+            (*node)->left = left_rotate(&(*node)->left);
+            *node = left_rotate(&(*node));
         }
         else
         {
             // Right
-            (*head) = rotate_to_right(&(*head));
+            *node = right_rotate(&(*node));
         }
 
     }
 }
 
-void insert_node(type_pt_node new_node, type_pt_node* head)
+void insert(type_pt_node* root, int data)
 {
     
-    if (new_node == NULL) 
+    if (*root == NULL)
     {
-        printf("ERROR: It was not allocated");
-        return;
-    }
-
-    if (*head == NULL)
-    {
-        *head = new_node;
+        *root = allocate(data);
     }
     else
     {
 
-        if (new_node->data > (*head)->data)
+        if (data > (*root)->data)
         {
-            insert_node(new_node, &(*head)->right);
+            insert(&(*root)->right, data);
         }
-        else if (new_node->data < (*head)->data)
+        else if (data < (*root)->data)
         {
-            insert_node(new_node, &(*head)->left);
+            insert(&(*root)->left, data);
         }
-        else if (new_node->data > (*head)->data)
+        else if (data > (*root)->data)
         {
             printf("ERROR: Data already present");
             return;
@@ -139,7 +133,7 @@ void insert_node(type_pt_node new_node, type_pt_node* head)
     }
 
     // Check if the three keep the invariant
-    avl_balance(&(*head), new_node->data);
+    rebalance(&(*root), data);
 }
 
 type_pt_node find_in_order_sucessor(type_pt_node start_point)
@@ -208,12 +202,12 @@ void delete_node(int data, type_pt_node *head)
     }
 
     // Check if the three keep the invariant
-    avl_balance(&(*head), data);
+    rebalance(&(*head), data);
 }
 
-void insert(int data, type_pt_node* head)
+void add(type_pt_node* head, int data)
 {
-    insert_node(allocate(data), head);
+    insert(head, data);
 }
 
 void delete(int data, type_pt_node *head)
@@ -222,7 +216,8 @@ void delete(int data, type_pt_node *head)
     
 }
 
-int find(int data, type_pt_node head){
+int find(int data, type_pt_node head)
+{
     if (head == NULL) 
     {
         return FALSE;
